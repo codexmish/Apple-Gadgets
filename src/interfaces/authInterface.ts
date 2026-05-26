@@ -4,3 +4,8 @@ export interface Usersignup {
   password: string;
   role?: "user" | "moderator" | "admin";
 }
+
+export interface VerifyOTP {
+  email: string;
+  otp: string;
+}

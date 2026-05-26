@@ -25,4 +25,35 @@ const signup = async(req: Request, res: Response)=>{
 
 }
 
-export const authController = {signup}
+
+// ----------verify-otp
+const verifyOtp = async (req: Request, res: Response)=>{
+    const result = await authService.verifyOtp(req.body)
+
+    try {
+        
+        if(!result){
+            sendRes(res, {
+            statusCode: 400,
+            success: false,
+            message: "Invalid or expired OTP request",
+        })
+        }
+
+        sendRes(res, {
+            statusCode: 200,
+            success: true,
+            message: "email verified successfully",
+        })
+    } catch (error: any) {
+        sendRes(res, {
+            statusCode: 400,
+            success: false,
+            message: error.message,
+            error: error
+        })
+    }
+
+}
+
+export const authController = {signup, verifyOtp}

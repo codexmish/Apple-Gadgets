@@ -1,7 +1,7 @@
 import { OTPMailSender } from "../helpers/mailService";
 import { OTPmailTemplate } from "../helpers/OTPmailTemplates";
 import { utils } from "../helpers/utils";
-import type { Usersignup } from "../interfaces/authInterface";
+import type { Usersignup, VerifyOTP } from "../interfaces/authInterface";
 import { userSchema } from "../models/userSchema";
 import bcrypt from "bcrypt";
 
@@ -64,4 +64,43 @@ const signup = async (payload: Usersignup) => {
   return user;
 };
 
-export const authService = { signup };
+// -----------Verify-otp
+const verifyOtp = async (payload: VerifyOTP) => {
+  const { email, otp } = payload;
+
+  // ---email validatine
+  if (!email) {
+    throw new Error("Email is required");
+  }
+
+  if (!utils.isValidateEmail(email)) {
+    throw new Error("Email not valid");
+  }
+
+  const userData = await userSchema.findOneAndUpdate(
+    {
+      email,
+      otp,
+      otpExpiry: { $gt: Date.now() },
+      isVerified: false,
+    },
+    {
+      $set: {
+        otp: null,
+        otpExpiry: null,
+        isVerified: true,
+      },
+    },
+    {
+      returnDocument: "after",
+    },
+  );
+
+  // if (!userData) {
+  //   throw new Error("Invalid or expired OTP request");
+  // }
+
+  return userData;
+};
+
+export const authService = { signup, verifyOtp };

@@ -23,7 +23,7 @@ const otpMailSender = async ({
 }) => {
   try {
     await transporter.sendMail({
-      from: '"GoCommerce" <team@goCommerce.com>', // sender address
+      from: '"GoCommerce" <team@applegadgets.com>', // sender address
       to: email, // list of recipients
       subject: subject, // subject line
       html: template, // HTML body
