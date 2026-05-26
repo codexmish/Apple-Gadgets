@@ -1,6 +1,9 @@
+import { OTPMailSender } from "../helpers/mailService";
+import { OTPmailTemplate } from "../helpers/OTPmailTemplates";
 import { utils } from "../helpers/utils";
 import type { Usersignup } from "../interfaces/authInterface";
 import { userSchema } from "../models/userSchema";
+import bcrypt from "bcrypt";
 
 // ------------signup
 const signup = async (payload: Usersignup) => {
@@ -37,19 +40,28 @@ const signup = async (payload: Usersignup) => {
   }
 
   //  otp generate
-
   const otp = utils.generateOTP();
+
+  // password hash
+  const hashPassword = await bcrypt.hash(password, 10);
 
   //   create user
   const user = userSchema.create({
     fullname,
     email,
-    password,
+    password: hashPassword,
     otp,
     otpExpiry: Date.now() + 5 * 60 * 1000,
   });
 
-  return user
+  //   otp  mail send
+  OTPMailSender({
+    email,
+    subject: "verify your OTP",
+    template: OTPmailTemplate(otp),
+  });
+
+  return user;
 };
 
 export const authService = { signup };

@@ -10,8 +10,8 @@ const signup = async(req: Request, res: Response)=>{
         sendRes(res, {
             statusCode: 200,
             success: true,
-            message: "signup successfully",
-            data: user
+            message: "signup successfully, verify your email ",
+            // data: user
         })
     } catch (error: any) {
         
