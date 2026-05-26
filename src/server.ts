@@ -1,10 +1,11 @@
-import express, { type Request, type Response } from "express"
-const app = express()
+import app from "./app";
+import { dbConfig } from "./configs/dbConfig";
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!')
-})
+const main = () => {
+  app.listen(8000, () => {
+    dbConfig();
+    console.log("server is running");
+  });
+};
 
-app.listen(8000, () => {
-  console.log("server is running")
-})
+main();
