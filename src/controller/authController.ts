@@ -55,7 +55,6 @@ const verifyOtp = async (req: Request, res: Response) => {
 
 // ---------resend otp controller
 const resendOtp = async (req: Request, res: Response) => {
-
   try {
     const result = await authService.resentOtp(req.body);
 
@@ -77,8 +76,38 @@ const resendOtp = async (req: Request, res: Response) => {
 };
 
 // ----------sign in controller
-const signIn = async (req: Request, res: Response)=>{
+const signIn = async (req: Request, res: Response) => {
+  try {
+    const result = await authService.signIn(req.body);
+    const { accessToken, RefreshToken, userData } = result;
 
-}
+    // access token set
+    res.cookie("acc_tkn", accessToken, {
+      secure: false, //in production
+      httpOnly: true,
+      sameSite: "lax",
+    });
+
+    // Refresh token set
+    res.cookie("ref_tkn", RefreshToken, {
+      secure: false, //in production
+      httpOnly: true,
+      sameSite: "lax",
+    });
+
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "login successfully",
+    });
+  } catch (error: any) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
 
 export const authController = { signup, verifyOtp, resendOtp, signIn };

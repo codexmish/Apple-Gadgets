@@ -1,9 +1,16 @@
 import { OTPMailSender } from "../helpers/mailService";
 import { OTPmailTemplate } from "../helpers/OTPmailTemplates";
+import config from "../helpers/processEnv";
 import { utils } from "../helpers/utils";
-import type { ResendOtp, Usersignup, VerifyOTP } from "../interfaces/authInterface";
+import type {
+  ResendOtp,
+  SignIn,
+  Usersignup,
+  VerifyOTP,
+} from "../interfaces/authInterface";
 import { userSchema } from "../models/userSchema";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 // ------------signup
 const signup = async (payload: Usersignup) => {
@@ -105,7 +112,7 @@ const verifyOtp = async (payload: VerifyOTP) => {
 
 // ---------resend otp
 const resentOtp = async (payload: ResendOtp) => {
-  const {email} = payload
+  const { email } = payload;
   // ---email validatine
   if (!email) {
     throw new Error("Invalid Request");
@@ -134,17 +141,62 @@ const resentOtp = async (payload: ResendOtp) => {
     subject: "verify your OTP",
     template: OTPmailTemplate(otp),
   });
-  
-  console.log(userData);
-  
 
-  return userData
+  console.log(userData);
+
+  return userData;
 };
 
-
 // ----------sign in
-const signIn = async ()=>{
+const signIn = async (payload: SignIn) => {
+  const { email, password } = payload;
 
-}
+  // ---email validatine
+  if (!email) {
+    throw new Error("Email is required");
+  }
+
+  if (!utils.isValidateEmail(email)) {
+    throw new Error("Email not valid");
+  }
+
+  // ---password validatine
+  if (!password) {
+    throw new Error("Password is required");
+  }
+
+  if (!utils.isValidatePassword(password)) {
+    throw new Error("Password not valid");
+  }
+
+  // -----check if user not exist
+  const userData = await userSchema.findOne({ email }).select("+password");
+
+  if (!userData) {
+    throw new Error("INVALD CREDENTIALS");
+  }
+
+  // passwordCheck
+  const matchPassword = await bcrypt.compare(password, userData.password);
+
+  if (!matchPassword) {
+    throw new Error("INVALD CREDENTIALS");
+  }
+
+  //   JWT toke genarate
+  const jwtPayload = {
+    id: userData.id,
+    name: userData.fullname,
+    email: userData.email,
+  };
+
+  const accessToken = jwt.sign(jwtPayload, config.JWT_SEC, { expiresIn: "1d" });
+
+  const RefreshToken = jwt.sign(jwtPayload, config.JWT_SEC, {
+    expiresIn: "30d",
+  });
+
+  return { accessToken, RefreshToken, userData };
+};
 
 export const authService = { signup, verifyOtp, resentOtp, signIn };

@@ -13,3 +13,8 @@ export interface VerifyOTP {
 export interface ResendOtp {
   email: string;
 }
+
+export interface SignIn {
+  email: string;
+  password: string;
+}
