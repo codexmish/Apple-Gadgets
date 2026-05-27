@@ -19,10 +19,11 @@ export interface SignIn {
   password: string;
 }
 
-export interface CustomRequest extends Request {
-  user?: {
-    _id: string;
-    name: string;
-    email: string;
-  };
+
+export interface UpdateUser {
+  fullname?: string;
+  address?: string;
+  avatar? : string;
 }
+
+

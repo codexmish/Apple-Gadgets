@@ -5,6 +5,7 @@ import { utils } from "../helpers/utils";
 import type {
   ResendOtp,
   SignIn,
+  UpdateUser,
   Usersignup,
   VerifyOTP,
 } from "../interfaces/authInterface";
@@ -203,9 +204,49 @@ const signIn = async (payload: SignIn) => {
 const getProfile = async (_id: string) => {
   const profileData = await userSchema.findOne(
     { _id },
-    { fullname: 1, email: 1, role: 1, avatar: 1 },
+    { fullname: 1, email: 1, role: 1, avatar: 1, address: 1 },
   );
   return profileData;
 };
 
-export const authService = { signup, verifyOtp, resentOtp, signIn, getProfile };
+// ---------update profile
+const updateProfile = async (
+  payload: UpdateUser,
+  avatarPayload: UpdateUser,
+  _id: string,
+) => {
+  const { fullname, address } = payload;
+  const avatar = avatarPayload;
+  const userData = await userSchema.findOne({ _id });
+
+  if (!userData) {
+    throw new Error("Something went wrong");
+  }
+
+  if(fullname && fullname.trim()) userData.fullname = fullname
+  if(address && address.trim()) userData.address = address
+  if (avatar) {
+    const avatarUrl = await utils.uploadToCloudinary({
+      mimetype: (avatar as any).mimetype,
+      imgBuffer: (avatar as any).buffer,
+    });
+
+    // deleting previous avatar
+    utils.destroyFromCloudinary(userData.avatar)
+
+    // set new avatar
+    userData.avatar = avatarUrl
+  }
+
+  userData.save()
+  return userData
+};
+
+export const authService = {
+  signup,
+  verifyOtp,
+  resentOtp,
+  signIn,
+  getProfile,
+  updateProfile,
+};

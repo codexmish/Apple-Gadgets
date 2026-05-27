@@ -110,28 +110,25 @@ const signIn = async (req: Request, res: Response) => {
   }
 };
 
-
 // ----------getProfile
-const getProfile = async(req: Request, res: Response)=>{
-  
+const getProfile = async (req: Request, res: Response) => {
   try {
+    const profileData = await authService.getProfile((req as any).user.id);
 
-    const profileData = await authService.getProfile((req as any).user.id)
-
-    if(!profileData){
-      return sendRes(res,{
+    if (!profileData) {
+      return sendRes(res, {
         statusCode: 400,
         success: false,
-        message: "Invalid Request"
-      })
+        message: "Invalid Request",
+      });
     }
 
-    sendRes(res,{
-        statusCode: 200,
-        success: true,
-        message: "profile data",
-        data: profileData
-      })
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "profile data",
+      data: profileData,
+    });
   } catch (error: any) {
     sendRes(res, {
       statusCode: 500,
@@ -140,6 +137,40 @@ const getProfile = async(req: Request, res: Response)=>{
       error: error,
     });
   }
-}
+};
 
-export const authController = { signup, verifyOtp, resendOtp, signIn, getProfile };
+// ---------update profile
+const updateProfile = async (req: Request, res: Response) => {
+  try {
+    const result = await authService.updateProfile(
+      req.body,
+      (req as any).file,
+      (req as any).user.id,
+    );
+
+    if (result) {
+      sendRes(res, {
+        statusCode: 200,
+        success: true,
+        message: "Profile updated successfully",
+        data: result,
+      });
+    }
+  } catch (error: any) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+
+export const authController = {
+  signup,
+  verifyOtp,
+  resendOtp,
+  signIn,
+  getProfile,
+  updateProfile,
+};
