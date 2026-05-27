@@ -141,4 +141,10 @@ const resentOtp = async (payload: ResendOtp) => {
   return userData
 };
 
-export const authService = { signup, verifyOtp, resentOtp };
+
+// ----------sign in
+const signIn = async ()=>{
+
+}
+
+export const authService = { signup, verifyOtp, resentOtp, signIn };

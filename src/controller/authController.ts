@@ -76,4 +76,9 @@ const resendOtp = async (req: Request, res: Response) => {
   }
 };
 
-export const authController = { signup, verifyOtp, resendOtp };
+// ----------sign in controller
+const signIn = async (req: Request, res: Response)=>{
+
+}
+
+export const authController = { signup, verifyOtp, resendOtp, signIn };
