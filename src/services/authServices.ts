@@ -1,7 +1,7 @@
 import { OTPMailSender } from "../helpers/mailService";
 import { OTPmailTemplate } from "../helpers/OTPmailTemplates";
 import { utils } from "../helpers/utils";
-import type { Usersignup, VerifyOTP } from "../interfaces/authInterface";
+import type { ResendOtp, Usersignup, VerifyOTP } from "../interfaces/authInterface";
 import { userSchema } from "../models/userSchema";
 import bcrypt from "bcrypt";
 
@@ -103,4 +103,42 @@ const verifyOtp = async (payload: VerifyOTP) => {
   return userData;
 };
 
-export const authService = { signup, verifyOtp };
+// ---------resend otp
+const resentOtp = async (payload: ResendOtp) => {
+  const {email} = payload
+  // ---email validatine
+  if (!email) {
+    throw new Error("Invalid Request");
+  }
+
+  if (!utils.isValidateEmail(email)) {
+    throw new Error("Invalid Request");
+  }
+
+  const userData = await userSchema.findOne({ email, isVerified: false });
+
+  if (!userData) {
+    throw new Error("Invalid Request");
+  }
+
+  // otp generate
+  const otp = utils.generateOTP();
+
+  userData.otp = otp;
+  userData.otpExpiry = new Date(Date.now() + 5 * 60 * 1000);
+  await userData.save();
+
+  //   otp  mail send
+  OTPMailSender({
+    email,
+    subject: "verify your OTP",
+    template: OTPmailTemplate(otp),
+  });
+  
+  console.log(userData);
+  
+
+  return userData
+};
+
+export const authService = { signup, verifyOtp, resentOtp };

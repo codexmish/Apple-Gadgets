@@ -9,3 +9,7 @@ export interface VerifyOTP {
   email: string;
   otp: string;
 }
+
+export interface ResendOtp {
+  email: string;
+}
