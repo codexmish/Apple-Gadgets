@@ -199,4 +199,9 @@ const signIn = async (payload: SignIn) => {
   return { accessToken, RefreshToken, userData };
 };
 
-export const authService = { signup, verifyOtp, resentOtp, signIn };
+// -------------get profile
+const getProfile = async(_id: string)=>{
+
+}
+
+export const authService = { signup, verifyOtp, resentOtp, signIn, getProfile };

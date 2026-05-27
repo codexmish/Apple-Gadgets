@@ -18,3 +18,11 @@ export interface SignIn {
   email: string;
   password: string;
 }
+
+export interface CustomRequest extends Request {
+  user?: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+}

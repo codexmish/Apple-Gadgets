@@ -110,4 +110,15 @@ const signIn = async (req: Request, res: Response) => {
   }
 };
 
-export const authController = { signup, verifyOtp, resendOtp, signIn };
+
+// ----------getProfile
+const getProfile = async(req: Request, res: Response)=>{
+  
+  try {
+    const profileData = await authService.getProfile((req as any).user._id)
+  } catch (error) {
+    
+  }
+}
+
+export const authController = { signup, verifyOtp, resendOtp, signIn, getProfile };
