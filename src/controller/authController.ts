@@ -115,9 +115,30 @@ const signIn = async (req: Request, res: Response) => {
 const getProfile = async(req: Request, res: Response)=>{
   
   try {
-    const profileData = await authService.getProfile((req as any).user._id)
-  } catch (error) {
-    
+
+    const profileData = await authService.getProfile((req as any).user.id)
+
+    if(!profileData){
+      return sendRes(res,{
+        statusCode: 400,
+        success: false,
+        message: "Invalid Request"
+      })
+    }
+
+    sendRes(res,{
+        statusCode: 200,
+        success: true,
+        message: "profile data",
+        data: profileData
+      })
+  } catch (error: any) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
   }
 }
 

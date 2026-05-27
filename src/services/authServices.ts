@@ -200,8 +200,12 @@ const signIn = async (payload: SignIn) => {
 };
 
 // -------------get profile
-const getProfile = async(_id: string)=>{
-
-}
+const getProfile = async (_id: string) => {
+  const profileData = await userSchema.findOne(
+    { _id },
+    { fullname: 1, email: 1, role: 1, avatar: 1 },
+  );
+  return profileData;
+};
 
 export const authService = { signup, verifyOtp, resentOtp, signIn, getProfile };

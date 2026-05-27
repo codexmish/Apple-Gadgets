@@ -6,6 +6,7 @@ import sendRes from "../helpers/sendResponse";
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   try {
     const { acc_tkn } = req.cookies;
+    
 
     const decoded = jwt.verify(acc_tkn as string, config.JWT_SEC) as JwtPayload;
 
