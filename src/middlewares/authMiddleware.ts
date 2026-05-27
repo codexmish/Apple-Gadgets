@@ -19,6 +19,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
     if (decoded) {
       (req as any).user = decoded;
+      
       next();
     } else {
       sendRes(res, {

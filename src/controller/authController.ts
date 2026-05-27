@@ -166,6 +166,29 @@ const updateProfile = async (req: Request, res: Response) => {
   }
 };
 
+// -----get userList
+const userList = async (req: Request, res: Response) => {
+  try {
+    const userList = await authService.getUserList();
+
+    if (userList) {
+      sendRes(res, {
+        statusCode: 400,
+        success: false,
+        message: "user find successfully",
+        data: userList,
+      });
+    }
+  } catch (error: any) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+
 export const authController = {
   signup,
   verifyOtp,
@@ -173,4 +196,5 @@ export const authController = {
   signIn,
   getProfile,
   updateProfile,
+  userList,
 };

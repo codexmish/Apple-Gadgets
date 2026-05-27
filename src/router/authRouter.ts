@@ -2,6 +2,7 @@ import express from "express";
 import { authController } from "../controller/authController";
 import authMiddleware from "../middlewares/authMiddleware";
 import multer from "multer";
+import roleCheckMiddleWare from "../middlewares/roleCheckMiddleware";
 const upload = multer();
 const router = express.Router();
 
@@ -15,6 +16,12 @@ router.put(
   authMiddleware,
   upload.single("avatar"),
   authController.updateProfile,
+);
+router.get(
+  "/userlist",
+  authMiddleware,
+  roleCheckMiddleWare,
+  authController.userList,
 );
 
 export const authRouter = router;

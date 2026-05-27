@@ -143,7 +143,6 @@ const resentOtp = async (payload: ResendOtp) => {
     template: OTPmailTemplate(otp),
   });
 
-
   return userData;
 };
 
@@ -188,6 +187,7 @@ const signIn = async (payload: SignIn) => {
     id: userData.id,
     name: userData.fullname,
     email: userData.email,
+    role: userData.role,
   };
 
   const accessToken = jwt.sign(jwtPayload, config.JWT_SEC, { expiresIn: "1d" });
@@ -243,6 +243,12 @@ const updateProfile = async (
   return userData;
 };
 
+// -----get userList
+const getUserList = async () => {
+  const userList = await userSchema.find();
+  return userList;
+};
+
 export const authService = {
   signup,
   verifyOtp,
@@ -250,4 +256,5 @@ export const authService = {
   signIn,
   getProfile,
   updateProfile,
+  getUserList,
 };
