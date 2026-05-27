@@ -246,21 +246,41 @@ const updateProfile = async (
 
 // -----get userList
 const getUserList = async (payload: FilteringUser) => {
-  const { isVerified } = payload;
+  const { isVerified, limit, page } = payload;
   const filterQueries: FilteringUser = {};
+  const skip = (limit as number) * ((page || 1) - 1);
 
   if (isVerified) {
     filterQueries.isVerified = isVerified;
   }
 
-  const userList = await userSchema.find(filterQueries, {
-    fullname: 1,
-    email: 1,
-    role: 1,
-    avatar: 1,
-    isVerified: 1,
-  });
-  return userList;
+  const userList = await userSchema
+    .find(filterQueries, {
+      fullname: 1,
+      email: 1,
+      role: 1,
+      avatar: 1,
+      isVerified: 1,
+    })
+    .limit(limit || 10)
+    .skip(skip);
+
+    // -----pagination data
+    const totalUser = await userSchema.countDocuments();
+    const totalPage = Math.ceil(totalUser / (Number(limit) || 10))
+    const hasNextPage = totalPage > Number(page)
+    const hasPrevPage = totalPage < Number(page)
+  return {
+    userList,
+    pagination: {
+      totalUser,
+      limit,
+      page,
+      totalPage,
+      hasNextPage,
+      hasPrevPage
+    },
+  };
 };
 
 export const authService = {

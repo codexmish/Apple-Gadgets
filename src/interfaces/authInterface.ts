@@ -27,4 +27,6 @@ export interface UpdateUser {
 
 export interface FilteringUser {
   isVerified?: boolean;
+  limit?: number;
+  page?: number;
 }

@@ -172,8 +172,8 @@ const userList = async (req: Request, res: Response) => {
 
     if (userList) {
       sendRes(res, {
-        statusCode: 400,
-        success: false,
+        statusCode: 200,
+        success: true,
         message: "user find successfully",
         data: userList,
       });
