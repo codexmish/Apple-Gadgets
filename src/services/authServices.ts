@@ -223,8 +223,8 @@ const updateProfile = async (
     throw new Error("Something went wrong");
   }
 
-  if(fullname && fullname.trim()) userData.fullname = fullname
-  if(address && address.trim()) userData.address = address
+  if (fullname && fullname.trim()) userData.fullname = fullname;
+  if (address && address.trim()) userData.address = address;
   if (avatar) {
     const avatarUrl = await utils.uploadToCloudinary({
       mimetype: (avatar as any).mimetype,
@@ -232,14 +232,16 @@ const updateProfile = async (
     });
 
     // deleting previous avatar
-    utils.destroyFromCloudinary(userData.avatar)
+    if (userData.avatar) {
+      utils.destroyFromCloudinary(userData.avatar);
+    }
 
     // set new avatar
-    userData.avatar = avatarUrl
+    userData.avatar = avatarUrl;
   }
 
-  userData.save()
-  return userData
+  userData.save();
+  return userData;
 };
 
 export const authService = {

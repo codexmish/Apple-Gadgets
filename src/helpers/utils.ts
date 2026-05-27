@@ -26,21 +26,20 @@ const uploadToCloudinary = async ({ mimetype, imgBuffer }: any) => {
 };
 
 // ------distroy from cloudinary
-const destroyFromCloudinary= (url: string)=>{
-  const publicId = url.split("/").pop()?.split(".").shift()
+const destroyFromCloudinary = (url: string) => {
+  const publicId = url.split("/").pop()?.split(".").shift();
 
-  cloudinary.uploader.destroy(publicId as string, (error, result)=>{
-    if(error){
+  cloudinary.uploader.destroy(publicId as string, (error, result) => {
+    if (error) {
       console.log("destroy from cloudinary:", error);
     }
-    
-  })
-}
+  });
+};
 
 export const utils = {
   isValidateEmail,
   isValidatePassword,
   generateOTP,
   uploadToCloudinary,
-  destroyFromCloudinary
+  destroyFromCloudinary,
 };
