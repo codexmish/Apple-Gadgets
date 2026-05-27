@@ -19,11 +19,12 @@ export interface SignIn {
   password: string;
 }
 
-
 export interface UpdateUser {
   fullname?: string;
   address?: string;
-  avatar? : string;
+  avatar?: string;
 }
 
-
+export interface FilteringUser {
+  isVerified?: boolean;
+}

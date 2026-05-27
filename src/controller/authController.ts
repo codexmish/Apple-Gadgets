@@ -168,7 +168,7 @@ const updateProfile = async (req: Request, res: Response) => {
 // -----get userList
 const userList = async (req: Request, res: Response) => {
   try {
-    const userList = await authService.getUserList();
+    const userList = await authService.getUserList(req.query);
 
     if (userList) {
       sendRes(res, {

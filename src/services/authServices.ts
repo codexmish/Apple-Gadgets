@@ -3,6 +3,7 @@ import { OTPmailTemplate } from "../helpers/OTPmailTemplates";
 import config from "../helpers/processEnv";
 import { utils } from "../helpers/utils";
 import type {
+  FilteringUser,
   ResendOtp,
   SignIn,
   UpdateUser,
@@ -244,8 +245,21 @@ const updateProfile = async (
 };
 
 // -----get userList
-const getUserList = async () => {
-  const userList = await userSchema.find();
+const getUserList = async (payload: FilteringUser) => {
+  const { isVerified } = payload;
+  const filterQueries: FilteringUser = {};
+
+  if (isVerified) {
+    filterQueries.isVerified = isVerified;
+  }
+
+  const userList = await userSchema.find(filterQueries, {
+    fullname: 1,
+    email: 1,
+    role: 1,
+    avatar: 1,
+    isVerified: 1,
+  });
   return userList;
 };
 
