@@ -6,7 +6,14 @@ import sendRes from "../helpers/sendResponse";
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   try {
     const { acc_tkn } = req.cookies;
-    
+
+    if (!acc_tkn) {
+      return sendRes(res, {
+        statusCode: 401,
+        success: false,
+        message: "unauthorized request",
+      });
+    }
 
     const decoded = jwt.verify(acc_tkn as string, config.JWT_SEC) as JwtPayload;
 
@@ -15,20 +22,18 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
       next();
     } else {
       sendRes(res, {
-        statusCode: 401,
+        statusCode: 400,
         success: false,
         message: "unauthorized request",
       });
     }
   } catch (error) {
-    console.log(error);
-
     sendRes(res, {
-      statusCode: 401,
+      statusCode: 400,
       success: false,
       message: "unauthorized request",
     });
   }
 };
 
-export default authMiddleware
+export default authMiddleware;

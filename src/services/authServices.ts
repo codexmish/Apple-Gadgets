@@ -143,7 +143,6 @@ const resentOtp = async (payload: ResendOtp) => {
     template: OTPmailTemplate(otp),
   });
 
-  console.log(userData);
 
   return userData;
 };
