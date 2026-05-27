@@ -153,7 +153,6 @@ const updateProfile = async (req: Request, res: Response) => {
         statusCode: 200,
         success: true,
         message: "Profile updated successfully",
-        data: result,
       });
     }
   } catch (error: any) {
