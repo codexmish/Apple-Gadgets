@@ -1,3 +1,21 @@
+/* -------font link */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
 @import "tailwindcss";
 
+@utility container {
+  margin-inline: auto;
+}
 
+
+
+@theme {
+  /* ---Fonts */
+  --font-inter: "Inter", sans-serif;
+
+  /* ---Colors */
+  --color-blackText: #141414;
+  /* --color-secoundary: #4b5563; */
+  /* --text-whitetext: #F8FAFC; */
+  /* --color-border: #E5E7EB; */
+}
