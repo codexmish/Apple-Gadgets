@@ -1,6 +1,73 @@
+"use client";
+import React, { useState } from "react";
 import FormInput from "@/app/components/ui/FormInput";
+import AuthButton from "@/app/components/ui/AuthButton";
 
 const page = () => {
+  // ----ragex
+  const ragex = {
+    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    pass: /^.{6,}$/,
+  };
+
+  // -----error
+  const [allError, setAllError] = useState({
+    fullnameError: "border-[#d1d5db]",
+    emailError: "border-[#d1d5db]",
+    passwordError: "border-[#d1d5db]",
+  });
+
+  // ---form data
+  const [formData, setFormData] = useState({
+    fullname: "",
+    email: "",
+    password: "",
+  });
+  console.log(formData);
+
+  // ------form submit handaler
+  const handleRegister = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // validation
+
+    if (!formData.fullname || formData.fullname === "") {
+      setAllError((prev) => ({ ...prev, fullnameError: "border-red-500" }));
+    } else {
+      setAllError((prev) => ({ ...prev, fullnameError: "border-[#d1d5db]" }));
+    }
+
+    if (
+      !ragex.email.test(formData.email) ||
+      !formData.email ||
+      formData.email === ""
+    ) {
+      setAllError((prev) => ({ ...prev, emailError: "border-red-500" }));
+    } else {
+      setAllError((prev) => ({ ...prev, emailError: "border-[#d1d5db]" }));
+    }
+
+    if (
+      !ragex.pass.test(formData.password) ||
+      !formData.password ||
+      formData.password === ""
+    ) {
+      setAllError((prev) => ({ ...prev, passwordError: "border-red-500" }));
+    } else {
+      setAllError((prev) => ({ ...prev, passwordError: "border-[#d1d5db]" }));
+    }
+  };
+
+  // --------onchange handaler
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   return (
     <>
       <div className="w-full h-screen bg-black/30 backdrop-blur-3xl flex items-center justify-center">
@@ -8,15 +75,39 @@ const page = () => {
           {/* -----form */}
           <div>
             <div className="text-2xl text-blackText font-inter font-semibold flex items-center justify-center mb-20">
-              Sign In
+              Sign Up
             </div>
-            <form action="" className="flex flex-col space-y-4">
+            <form
+              onSubmit={handleRegister}
+              action=""
+              className="flex flex-col space-y-4"
+            >
               {/* ------fullname input */}
-              <FormInput label="Full Name" placeholder="Enter Your FullName" />
+              <FormInput
+                onchange={handleOnChange}
+                name="fullname"
+                label="Full Name"
+                placeholder="Enter Your FullName"
+                errBorder={allError.fullnameError}
+              />
               {/* ------email input */}
-              <FormInput label="Email" placeholder="Enter Your Email" />
+              <FormInput
+                onchange={handleOnChange}
+                name="email"
+                label="Email"
+                placeholder="Enter Your Email"
+                errBorder={allError.emailError}
+              />
               {/* ------password input */}
-              <FormInput label="PassWord" placeholder="Enter Your Password" />
+              <FormInput
+                onchange={handleOnChange}
+                name="password"
+                label="PassWord"
+                placeholder="Enter Your Password"
+                errBorder={allError.passwordError}
+              />
+
+              <AuthButton text="Sign Up" />
             </form>
           </div>
         </div>
