@@ -25,6 +25,7 @@ const page = () => {
   });
   console.log(formData);
 
+
   // ------form submit handaler
   const handleRegister = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -57,6 +58,8 @@ const page = () => {
       setAllError((prev) => ({ ...prev, passwordError: "border-[#d1d5db]" }));
     }
   };
+
+
 
   // --------onchange handaler
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
