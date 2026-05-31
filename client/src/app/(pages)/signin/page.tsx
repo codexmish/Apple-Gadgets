@@ -1,11 +1,10 @@
 "use client";
-import React, { useState } from "react";
-import FormInput from "@/app/components/ui/FormInput";
 import AuthButton from "@/app/components/ui/AuthButton";
-import "react-toastify/dist/ReactToastify.css";
+import FormInput from "@/app/components/ui/FormInput";
 import { showToast } from "@/app/utils/toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const page = () => {
   // ----ragex
@@ -14,33 +13,35 @@ const page = () => {
     pass: /^.{6,}$/,
   };
 
-  // -----error
-  const [allError, setAllError] = useState({
-    fullnameError: "border-[#d1d5db]",
-    emailError: "border-[#d1d5db]",
-    passwordError: "border-[#d1d5db]",
-  });
-
   // ---form data
   const [formData, setFormData] = useState({
-    fullname: "",
     email: "",
     password: "",
   });
-  
-  const router = useRouter()
+  console.log(formData);
+
+  const router = useRouter();
+
+  // -----error
+  const [allError, setAllError] = useState({
+    emailError: "border-[#d1d5db]",
+    passwordError: "border-[#d1d5db]",
+  });
+  // --------onchange handaler
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   // ------form submit handaler
   const handleRegister = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // validation
-
-    if (!formData.fullname || formData.fullname === "") {
-      setAllError((prev) => ({ ...prev, fullnameError: "border-red-500" }));
-    } else {
-      setAllError((prev) => ({ ...prev, fullnameError: "border-[#d1d5db]" }));
-    }
 
     if (
       !ragex.email.test(formData.email) ||
@@ -63,7 +64,7 @@ const page = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:8000/user/signup", {
+      const res = await fetch("http://localhost:8000/user/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -75,8 +76,7 @@ const page = () => {
 
       if (data.success == true) {
         showToast(data.message, "success");
-        router.push(`/otp-verify?email=${formData.email}`)
-        
+        router.push(`/`);
       } else {
         showToast(data.message, "error");
       }
@@ -85,46 +85,28 @@ const page = () => {
     }
   };
 
-  // --------onchange handaler
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
   return (
     <>
       <div className="w-full h-screen bg-black/30 backdrop-blur-3xl flex items-center justify-center">
-        <div className="w-[450px] h-120 bg-white flex justify-center items-center rounded-2xl shadow-xl">
-          {/* -----form */}
+        <div className="w-[450px] h-100 bg-white flex justify-center items-center rounded-2xl shadow-xl">
           <div>
             <div className="text-2xl text-blackText font-inter font-semibold flex items-center justify-center ">
-              Sign Up
+              Sign In
             </div>
             <form
               onSubmit={handleRegister}
               action=""
               className="flex flex-col space-y-4"
             >
-              {/* ------fullname input */}
-              <FormInput
-                onchange={handleOnChange}
-                name="fullname"
-                label="Full Name"
-                placeholder="Enter Your FullName"
-                errBorder={allError.fullnameError}
-              />
-              {/* ------email input */}
+              {/* ------Email input */}
               <FormInput
                 onchange={handleOnChange}
                 name="email"
-                label="Email"
-                placeholder="Enter Your Email"
+                label="email"
+                placeholder="Enter Your email"
                 errBorder={allError.emailError}
               />
+
               {/* ------password input */}
               <FormInput
                 onchange={handleOnChange}
@@ -133,18 +115,19 @@ const page = () => {
                 placeholder="Enter Your Password"
                 errBorder={allError.passwordError}
               />
-               {/* -----button */}
-              <AuthButton text="Sign Up" />
+
+              <AuthButton text="Sign in" />
+
+              <div className="mt-3 text-center text-base text-black font-inter font-normal">
+                Dont have an account?{" "}
+                <Link
+                  href={"/signin"}
+                  className="text-primaryOrange font-medium link-theme"
+                >
+                  sign up
+                </Link>
+              </div>
             </form>
-            <div className="mt-6 text-center text-base text-black font-inter font-normal">
-              Already have an account?{" "}
-              <Link
-                href={"/signin"}
-                className="text-primaryOrange font-medium link-theme"
-              >
-                sign in
-              </Link>
-            </div>
           </div>
         </div>
       </div>
