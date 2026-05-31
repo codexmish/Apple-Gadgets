@@ -130,7 +130,7 @@ const page = () => {
                 placeholder="Enter Your Password"
                 errBorder={allError.passwordError}
               />
-
+               {/* -----button */}
               <AuthButton text="Sign Up" />
             </form>
             <div className="mt-6 text-center text-base text-black font-inter font-normal">
