@@ -5,6 +5,7 @@ import AuthButton from "@/app/components/ui/AuthButton";
 import "react-toastify/dist/ReactToastify.css";
 import { showToast } from "@/app/utils/toast";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const page = () => {
   // ----ragex
@@ -26,7 +27,8 @@ const page = () => {
     email: "",
     password: "",
   });
-  console.log(formData);
+  
+  const router = useRouter()
 
   // ------form submit handaler
   const handleRegister = async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -70,10 +72,11 @@ const page = () => {
       });
 
       const data = await res.json();
-      console.log(data);
 
       if (data.success == true) {
         showToast(data.message, "success");
+        router.push(`/otp-verify?email=${formData.email}`)
+        
       } else {
         showToast(data.message, "error");
       }
