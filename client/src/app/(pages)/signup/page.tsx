@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import FormInput from "@/app/components/ui/FormInput";
 import AuthButton from "@/app/components/ui/AuthButton";
+import "react-toastify/dist/ReactToastify.css";
+import { showToast } from "@/app/utils/toast";
 
 const page = () => {
   // ----ragex
@@ -25,9 +27,8 @@ const page = () => {
   });
   console.log(formData);
 
-
   // ------form submit handaler
-  const handleRegister = (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleRegister = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // validation
@@ -57,9 +58,28 @@ const page = () => {
     } else {
       setAllError((prev) => ({ ...prev, passwordError: "border-[#d1d5db]" }));
     }
+
+    try {
+      const res = await fetch("http://localhost:8000/user/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      console.log(data);
+
+      if (data.success == true) {
+        showToast(data.message, "success");
+      } else {
+        showToast(data.message, "error");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
-
-
 
   // --------onchange handaler
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
