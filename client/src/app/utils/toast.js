@@ -1,5 +1,7 @@
 'use client'
 import { Bounce, toast } from "react-toastify";
+
+// --------exporting tostconntainer as client component to latout
 export { ToastContainer } from "react-toastify";
 
 export const showToast = (message, type = "success") => {

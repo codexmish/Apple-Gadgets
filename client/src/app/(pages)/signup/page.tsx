@@ -4,6 +4,7 @@ import FormInput from "@/app/components/ui/FormInput";
 import AuthButton from "@/app/components/ui/AuthButton";
 import "react-toastify/dist/ReactToastify.css";
 import { showToast } from "@/app/utils/toast";
+import Link from "next/link";
 
 const page = () => {
   // ----ragex
@@ -97,7 +98,7 @@ const page = () => {
         <div className="w-[450px] h-120 bg-white flex justify-center items-center rounded-2xl shadow-xl">
           {/* -----form */}
           <div>
-            <div className="text-2xl text-blackText font-inter font-semibold flex items-center justify-center mb-20">
+            <div className="text-2xl text-blackText font-inter font-semibold flex items-center justify-center ">
               Sign Up
             </div>
             <form
@@ -132,6 +133,15 @@ const page = () => {
 
               <AuthButton text="Sign Up" />
             </form>
+            <div className="mt-6 text-center text-base text-black font-inter font-normal">
+              Already have an account?{" "}
+              <Link
+                href={"/signin"}
+                className="text-primaryOrange font-medium link-theme"
+              >
+                Login
+              </Link>
+            </div>
           </div>
         </div>
       </div>
