@@ -1,7 +1,7 @@
 "use client";
 import AuthButton from "@/app/components/ui/AuthButton";
 import { showToast } from "@/app/utils/toast";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 const page = () => {
@@ -10,20 +10,11 @@ const page = () => {
     email: "",
     otp: "",
   });
-  console.log(formData);
 
   const searchParams = useSearchParams();
+  const router = useRouter();
 
-  // // --------onchange handaler
-  //   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     const { value } = e.target;
-
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       otp: value,
-  //     }));
-  //   };
-
+  // ---handaler
   const handleverification = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -45,7 +36,34 @@ const page = () => {
 
       if (data.success == true) {
         showToast(data.message, "success");
-        // router.push(`/otp-verify?email=${formData.email}`)
+        router.push(`/signin`);
+      } else {
+        showToast(data.message, "error");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const resendOtpHandaler = async () => {
+    await setFormData((prev) => ({
+      ...prev,
+      email: searchParams.get("email") ?? "",
+    }));
+
+    try {
+      const res = await fetch("http://localhost:8000/user/resend-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (data.success == true) {
+        showToast(data.message, "success");
       } else {
         showToast(data.message, "error");
       }
@@ -85,6 +103,15 @@ const page = () => {
               />
               {/* button */}
               <AuthButton text="Verify" />
+              <div className="mt-3 text-center text-base text-black font-inter font-normal">
+                Dont get otp?{" "}
+                <span
+                  onClick={resendOtpHandaler}
+                  className="text-primaryOrange font-medium link-theme cursor-pointer"
+                >
+                  Resend otp
+                </span>
+              </div>
             </form>
           </div>
         </div>
