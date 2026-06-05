@@ -121,7 +121,7 @@ const page = () => {
               <div className="mt-3 text-center text-base text-black font-inter font-normal">
                 Dont have an account?{" "}
                 <Link
-                  href={"/signin"}
+                  href={"/signup"}
                   className="text-primaryOrange font-medium link-theme"
                 >
                   sign up
