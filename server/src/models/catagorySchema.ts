@@ -5,10 +5,11 @@ const catagory = new mongoose.Schema(
     title: {
       type: String,
       required: true,
+      trim: true,
     },
     thumbnaile: {
       type: String,
-      required: true,
+      //   required: true,
     },
   },
   { timestamps: true },
