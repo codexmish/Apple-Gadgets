@@ -1,6 +1,8 @@
 import type { CreateCategory } from "../interfaces/categoryInterface";
 import { catagorySchema } from "../models/catagorySchema";
 
+
+// ----create category
 const createCategory = async (payload: CreateCategory) => {
   const { title } = payload;
 
@@ -15,4 +17,11 @@ const createCategory = async (payload: CreateCategory) => {
  return category
 };
 
-export const caragoryService = { createCategory };
+
+// ----get all category
+const getAllCategory = async()=>{
+    const categoryList = await catagorySchema.find({})
+    return categoryList
+}
+
+export const caragoryService = { createCategory, getAllCategory };

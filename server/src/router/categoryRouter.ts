@@ -10,5 +10,6 @@ router.post(
   roleCheckMiddleWare,
   catagoryController.createCategory,
 );
+router.get("/allcategory", catagoryController.getAllCategory)
 
 export const categoryRouter = router;
