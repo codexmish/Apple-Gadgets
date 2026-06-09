@@ -1,9 +1,13 @@
-import type { CreateProduct } from "../interfaces/productInterface";
+import { utils } from "../helpers/utils";
+import type {
+  CreateProduct,
+  ProductFile,
+} from "../interfaces/productInterface";
 import { catagorySchema } from "../models/catagorySchema";
 import { productSchema } from "../models/productSchema";
 
 // ------create produce services
-const createProduct = async (payload: CreateProduct) => {
+const createProduct = async (payload: CreateProduct, payload2: ProductFile) => {
   const {
     title,
     slug,
@@ -15,6 +19,8 @@ const createProduct = async (payload: CreateProduct) => {
     tags,
     isActive,
   } = payload;
+
+  const { thumbnail, images } = payload2;
 
   //   -----validation
   if (!title) {
@@ -52,7 +58,7 @@ const createProduct = async (payload: CreateProduct) => {
   }
 
   //   -------product variants validation
-  const vaariantsData = variants;
+  const vaariantsData = JSON.parse(variants as any); //this json data is temporaty, only for testiong on postman
 
   if (!Array.isArray(vaariantsData) || vaariantsData.length === 0) {
     throw new Error("minimum 1 varinat is required");
@@ -81,6 +87,48 @@ const createProduct = async (payload: CreateProduct) => {
   if (new Set(skus).size !== skus.length) {
     throw new Error("SKU must be unique");
   }
+
+  // -----thumbnail and image validation
+  if (!thumbnail || thumbnail.length === 0) {
+    throw new Error("thumbnail is required");
+  }
+
+  if (!images || images.length === 0) {
+    throw new Error("images is required");
+  }
+
+  // --------uploading thumbnail
+  const thumbnailUrl = await utils.uploadToCloudinary({
+    mimetype: thumbnail[0].mimetype,
+    imgBuffer: thumbnail[0].buffer,
+  });
+
+  // ---------uploading images
+  const imgres = images.map(
+    async (item: Express.Multer.File) =>
+      await utils.uploadToCloudinary({
+        mimetype: item.mimetype,
+        imgBuffer: item.buffer,
+      }),
+  );
+
+  const imageUrl = await Promise.all(imgres);
+
+  const productData = await productSchema.create({
+    title,
+    slug,
+    description,
+    category,
+    price,
+    discountPercentage,
+    variants: vaariantsData,
+    // tags,
+    // isActive: true,
+    thumbnail: thumbnailUrl,
+    images: imageUrl,
+  });
+
+  return productData;
 };
 
 export const productService = { createProduct };

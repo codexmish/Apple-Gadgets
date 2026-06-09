@@ -18,3 +18,8 @@ export interface CreateProduct {
   tags: string;
   isActive: boolean;
 }
+
+export interface ProductFile {
+  thumbnail?: any;
+  images?: any;
+}
