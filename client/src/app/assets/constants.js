@@ -1,4 +1,4 @@
-import { Gift, Repeat } from "lucide-react";
+import { Gift, Repeat, ShoppingCart, UserRound } from "lucide-react";
 
 const upperMenuItem = [
   {
@@ -17,8 +17,21 @@ const upperMenuItem = [
   {
     itemName: "Compare",
     itemLink: "/",
-    icon: Repeat
+    icon: Repeat,
   },
 ];
 
-export { upperMenuItem };
+const iconMenu = [
+  {
+    name: "CarTaxiFront",
+    itamLink: "/",
+    icon: <ShoppingCart />,
+  },
+  {
+    name: "account",
+    itamLink: "/",
+    icon: <UserRound />,
+  },
+];
+
+export { upperMenuItem, iconMenu };
