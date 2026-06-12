@@ -29,7 +29,7 @@ const iconMenu = [
   },
   {
     name: "account",
-    itamLink: "/",
+    itamLink: "/signin",
     icon: <UserRound />,
   },
 ];

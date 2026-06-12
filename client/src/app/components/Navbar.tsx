@@ -8,7 +8,7 @@ const Navbar = () => {
     <>
       {/* ------upper menu */}
       <div className="hidden lg:block">
-        <div className="bg-black w-full h-20 flex items-center">
+        <div className="bg-black w-full h-25 flex items-center">
           <div className="container flex items-center justify-between">
             {/* ------logo */}
             <div className="logo">
@@ -17,6 +17,8 @@ const Navbar = () => {
                 height={52}
                 src={"/images/logo.webp"}
                 alt="logo"
+                priority
+                style={{ height: "auto" }}
               />
             </div>
 
