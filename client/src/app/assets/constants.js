@@ -1,3 +1,5 @@
+import { Gift, Repeat } from "lucide-react";
+
 const upperMenuItem = [
   {
     itemName: "Blog",
@@ -10,12 +12,13 @@ const upperMenuItem = [
   {
     itemName: "Offers",
     itemLink: "/",
+    icon: Gift,
   },
   {
     itemName: "Compare",
     itemLink: "/",
+    icon: Repeat
   },
 ];
 
-
-export {upperMenuItem}
+export { upperMenuItem };
