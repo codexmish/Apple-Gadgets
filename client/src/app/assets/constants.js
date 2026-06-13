@@ -1,4 +1,11 @@
-import { Gift, Repeat, ShoppingCart, UserRound } from "lucide-react";
+import {
+  Box,
+  Gift,
+  MapPinHouse,
+  Repeat,
+  ShoppingCart,
+  UserRound,
+} from "lucide-react";
 
 const upperMenuItem = [
   {
@@ -34,20 +41,22 @@ const iconMenu = [
   },
 ];
 
-
 const accountSidebar = [
-    {
-      name: "Account Details",
-      href: "/account",
-    },
-    {
-      name: "Orders",
-      href: "/account/orders",
-    },
-    {
-      name: "Addresses",
-      href: "/account/addresses",
-    },
-  ];
+  {
+    name: "Account Details",
+    href: "/account",
+    icon: <UserRound />,
+  },
+  {
+    name: "Orders",
+    href: "/account/orders",
+    icon: <Box />,
+  },
+  {
+    name: "Addresses",
+    href: "/account/addresses",
+    icon: <MapPinHouse />,
+  },
+];
 
 export { upperMenuItem, iconMenu, accountSidebar };

@@ -10,7 +10,7 @@ const AccountLayout = ({
   return (
     <>
       <Navbar />
-      <div className="container mx-auto py-10">
+      <div className="container mx-auto py-5">
         <div className="grid grid-cols-12 gap-6">
           <div className="sidebar col-span-3">
             <AccoutSidebar />
