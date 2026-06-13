@@ -34,4 +34,20 @@ const iconMenu = [
   },
 ];
 
-export { upperMenuItem, iconMenu };
+
+const accountSidebar = [
+    {
+      name: "Account Details",
+      href: "/account",
+    },
+    {
+      name: "Orders",
+      href: "/account/orders",
+    },
+    {
+      name: "Addresses",
+      href: "/account/addresses",
+    },
+  ];
+
+export { upperMenuItem, iconMenu, accountSidebar };
